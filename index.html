@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <script>
+            async function  getData(pageNum)  {
+                let url = `https://summersalt.com/collections/swimwear/products.json?page=${pageNum}&limit=10`
+                const res = await fetch(url)
+                const data = await res.json()
+                if(pageNum && data.products.length === 10) {
+                    data.products.map(product => {
+                        var imageDiv = document.createElement("div")
+                        imageDiv.setAttribute("id", "imageDiv")
+                        var span = document.createElement("span")
+                        var img = document.createElement("img")
+                        span.innerHTML = product.title
+                        img.src = product.images[0].src
+                        document.body.appendChild(imageDiv)
+                        imageDiv.appendChild(img)
+                        imageDiv.appendChild(span)
+
+                })
+                var isActive = false;
+                window.onscroll = function(ev) {
+                     if ((!isActive && window.innerHeight + window.scrollY) >= document.body.offsetHeight ) {
+                        isActive = true;
+                        return getData(pageNum+1)
+                    }
+                };
+            }
+        }
+        const initialPageNum = 1
+        getData(initialPageNum)
+                
+        </script>
+       <div id=imageContainer> </div>
+    </body>
+</html>
